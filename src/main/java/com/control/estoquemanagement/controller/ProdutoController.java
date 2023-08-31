@@ -1,15 +1,16 @@
 package com.control.estoquemanagement.controller;
 
+import com.control.estoquemanagement.controller.Error.ApiError;
 import com.control.estoquemanagement.model.dto.ProdutoDto;
 import com.control.estoquemanagement.service.ProdutoService;
-import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+import java.time.ZonedDateTime;
+
+@RestController
+@RequestMapping("/produtos")
 public class ProdutoController {
 
     private final ProdutoService service;
@@ -18,10 +19,19 @@ public class ProdutoController {
         this.service = service;
     }
 
-    @PostMapping("/produtos")
-    public ResponseEntity cadastrarProduto(@Valid @RequestBody ProdutoDto produtoDto){
+    @PostMapping
+    public ResponseEntity<?> cadastrarProduto(@RequestBody ProdutoDto produtoDto) {
+        return service.cadastrarProduto(produtoDto) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
+    }
 
-        return service.cadastrarProduto(produtoDto) == null ? ResponseEntity.badRequest().body(null) : ResponseEntity.ok().body(produtoDto);
-
+    @GetMapping("/{id}")
+    public ResponseEntity<?> buscarProduto(@PathVariable("id") Long idProduto) {
+        try {
+            var produtoDto = service.buscarProduto(idProduto);
+            return ResponseEntity.ok(produtoDto);
+        } catch (RuntimeException e) {
+            ApiError apiError = new ApiError("Produto não encontrado", HttpStatus.NOT_FOUND, ZonedDateTime.now(), "/produtos/" + idProduto);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiError);
+        }
     }
 }

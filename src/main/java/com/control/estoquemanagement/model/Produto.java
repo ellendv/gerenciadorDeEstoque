@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.util.Date;
 
+
 @Entity
 @Table(name = "PRODUTO")
 public class Produto {
@@ -27,7 +28,28 @@ public class Produto {
     @Column(name = "PRODUTO_QTD_ATUAL")
     private Integer estoqueAtual;
 
-    @ManyToOne
-    @JoinColumn(name = "PRODUTO_ESTOQUE_ID")
-    private Estoque estoque;
+
+    public Produto(String descricao, Double valor, Integer estoqueMinimo, Integer estoqueAtual) {
+        this.descricao = descricao;
+        this.valor = valor;
+        this.data = new Date();
+        this.estoqueMinimo = estoqueMinimo;
+        this.estoqueAtual = estoqueAtual;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public Double getValor() {
+        return valor;
+    }
+
+    public Integer getEstoqueMinimo() {
+        return estoqueMinimo;
+    }
+
+    public Integer getEstoqueAtual() {
+        return estoqueAtual;
+    }
 }
