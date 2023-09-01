@@ -1,11 +1,13 @@
 package com.control.estoquemanagement.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.Date;
 
 
 @Entity
+@Data
 @Table(name = "PRODUTO")
 public class Produto {
     @Id
@@ -37,19 +39,8 @@ public class Produto {
         this.estoqueAtual = estoqueAtual;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public Produto() {
     }
 
-    public Double getValor() {
-        return valor;
-    }
 
-    public Integer getEstoqueMinimo() {
-        return estoqueMinimo;
-    }
-
-    public Integer getEstoqueAtual() {
-        return estoqueAtual;
-    }
 }

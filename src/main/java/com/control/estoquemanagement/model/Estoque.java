@@ -12,6 +12,10 @@ public class Estoque {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ESTOQUE_ID")
     private Long id;
-    @Column(name = "ESTOQUE_PRODUTO")
-    private Long listProdutos;
+    @Column(name = "ESTOQUE_DESCRICAO")
+    private String descricao;
+    @Column(name = "ESTOQUE_IDPRODUTO")
+    private Long idProduto;
+    @Column(name = "ESTOQUE_STATUS_PRODUTO")
+    private String status;
 }
