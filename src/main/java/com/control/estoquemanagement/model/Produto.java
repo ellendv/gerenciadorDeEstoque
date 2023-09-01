@@ -31,6 +31,7 @@ public class Produto {
     private Integer estoqueAtual;
 
 
+
     public Produto(String descricao, Double valor, Integer estoqueMinimo, Integer estoqueAtual) {
         this.descricao = descricao;
         this.valor = valor;

@@ -8,22 +8,27 @@ import java.time.LocalDate;
 
 @Entity
 @Data
+@Table(name = "MOVIMENTACAO")
 public class Movimentacao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "MOVIMENTACAO_ID")
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private TipoMovimentacao tipo;
+    @Column(name = "MOVIMENTACAO_TIPO")
+    private int tipo;
 
+    @Column(name = "MOVIMENTACAO_DATA")
     private LocalDate data;
+
+    @Column(name = "MOVIMENTACAO_QTD")
     private int quantidade;
 
     @ManyToOne
-    @JoinColumn(name = "produto_id")
+    @JoinColumn(name = "MOVIMENTACAO_IDPRODUTO")
     private Produto produto;
 
-    public Movimentacao(TipoMovimentacao tipo, LocalDate data, int quantidade, Produto produto) {
+    public Movimentacao(int tipo, LocalDate data, int quantidade, Produto produto) {
         this.tipo = tipo;
         this.data = data;
         this.quantidade = quantidade;

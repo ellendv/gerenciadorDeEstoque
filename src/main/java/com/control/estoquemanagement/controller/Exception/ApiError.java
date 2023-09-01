@@ -1,4 +1,4 @@
-package com.control.estoquemanagement.controller.Error;
+package com.control.estoquemanagement.controller.Exception;
 import org.springframework.http.HttpStatus;
 
 import java.time.ZonedDateTime;
