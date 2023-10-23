@@ -8,6 +8,6 @@ Spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
       hibernate:
-        ddl-auto: update
+        ddl-auto: create  # Use "create" instead of "update" to create the schema
         show_sql: true
         format: true
