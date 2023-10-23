@@ -54,10 +54,49 @@ public class ProdutoService {
         return converterParaProdutoDto(produto);
     }
 
+    public ProdutoDto buscarProdutoPorCodigoDeBarras(String id) {
+        Produto produto = repository.findProdutoByCodBarras(id);
+
+        return converterParaProdutoDto(produto);
+    }
+
+    public Boolean cadastrarPrecoCusto(Long idProduto, Double custo, Integer quantidadeComprada) {
+        Produto produto = buscarProdutoPorId(idProduto);
+
+        if (custo <= 0 || quantidadeComprada <= 0) {
+            throw new IllegalArgumentException("Custo e quantidade devem ser maiores que zero.");
+        }
+
+        Double precoCustoAtual = produto.getPrecoCusto();
+        Integer quantidadeAtual = produto.getEstoqueAtual();
+        Double novoPrecoCusto = ((precoCustoAtual * quantidadeAtual) + (custo * quantidadeComprada)) / (quantidadeAtual + quantidadeComprada);
+
+        produto.setPrecoCusto(novoPrecoCusto);
+        produto.setEstoqueAtual(quantidadeAtual + quantidadeComprada);
+
+        Produto updatedProduto = repository.save(produto);
+        estoqueService.atualizarSituacaoEstoque(updatedProduto);
+
+        return updatedProduto != null;
+    }
+
+    public Boolean cadastrarPrecoVenda(Long idProduto, Double precoVenda) {
+        Produto produto = buscarProdutoPorId(idProduto);
+
+        if (precoVenda <= 0) {
+            throw new IllegalArgumentException("O preço de venda deve ser maior que zero.");
+        }
+
+        produto.setPrecoVenda(precoVenda);
+
+        Produto updatedProduto = repository.save(produto);
+
+        return updatedProduto != null;
+    }
+
     @Transactional
     public ProdutoDetalheDto buscarProdutosPorNome(String nome) {
         Produto produto = repository.findProdutoByDescricao(nome);
-
         return converterParaProdutoDetalheDto(produto);
     }
 
@@ -291,9 +330,6 @@ public class ProdutoService {
         }
     }
 
-
-
-
     private void validarMovimentacaoDto(MovimentacaoDto movimentacaoDto) {
         if (movimentacaoDto == null || movimentacaoDto.getProdutoId() == null || movimentacaoDto.getQuantidade() <= 0) {
             throw new IllegalArgumentException("MovimentacaoDto inválido");
@@ -322,10 +358,14 @@ public class ProdutoService {
 
     private ProdutoDto converterParaProdutoDto(Produto produto) {
         return new ProdutoDto(
+                produto.getCodBarras(),
                 produto.getDescricao(),
                 produto.getValor(),
                 produto.getEstoqueMinimo(),
-                produto.getEstoqueAtual()
+                produto.getEstoqueAtual(),
+                produto.getPrecoCusto(),
+                produto.getPrecoVenda(),
+                produto.getDataEntradaEstoque()
         );
     }
 
@@ -351,7 +391,11 @@ public class ProdutoService {
                 produtoDto.getDescricao(),
                 produtoDto.getValor(),
                 produtoDto.getEstoqueMinimo(),
-                produtoDto.getEstoqueAtual()
+                produtoDto.getEstoqueAtual(),
+                produtoDto.getCodBarras(),
+                produtoDto.getPrecoCusto(),
+                produtoDto.getPrecoVenda(),
+                produtoDto.getDataEntradaEstoque()
         );
     }
 
@@ -371,4 +415,6 @@ public class ProdutoService {
 
         return movimentacaoDetalheDto;
     }
+
+
 }

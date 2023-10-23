@@ -10,4 +10,6 @@ import java.util.List;
 public interface ProdutoRepository extends JpaRepository<Produto, Long> {
 
     Produto findProdutoByDescricao(@Param("descricao") String descricao);
+
+    Produto findProdutoByCodBarras(@Param("codBarras")String codBarras);
 }

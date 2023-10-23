@@ -27,21 +27,11 @@ public class EstoqueService {
             Estoque estoque = estoqueRepository.findByIdProduto(produto.getId());
 
             if (estoque != null) {
-                SituacaoEstoque situacaoEstoque;
-
-                if (produto.getEstoqueAtual() <= 0) {
-                    situacaoEstoque = SituacaoEstoque.SemEstoque;
-                } else if (produto.getEstoqueAtual() <= produto.getEstoqueMinimo()) {
-                    situacaoEstoque = SituacaoEstoque.EsqutoquePerigoso;
-                } else {
-                    situacaoEstoque = SituacaoEstoque.EstoqueConfortavel;
-                }
-
-                estoque.setEstoque(situacaoEstoque.name());
+                estoque.setEstoque(calcularSituacaoEstoque(produto.getEstoqueAtual(), produto.getEstoqueMinimo()));
                 estoqueRepository.save(estoque);
-            } else {
+            } else
                 throw new IllegalArgumentException("Produto sem estoque relacionado!");
-            }
+
         } catch (Exception e) {
             throw new IllegalArgumentException("Erro ao atualizar a situação do estoque: " + e.getMessage(), e);
         }

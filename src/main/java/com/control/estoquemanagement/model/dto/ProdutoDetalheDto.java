@@ -5,11 +5,8 @@ import lombok.Data;
 @Data
 public class ProdutoDetalheDto {
     private Long idProduto;
-
     private String descricao;
-
     private Integer estoqueAtual;
-
     private String status;
 
     public ProdutoDetalheDto() {

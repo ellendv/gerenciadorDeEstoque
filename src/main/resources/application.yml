@@ -13,3 +13,5 @@ Spring:
         format: true
   h2:
     console.enabled: true
+
+

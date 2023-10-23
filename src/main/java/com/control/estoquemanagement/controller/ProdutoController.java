@@ -34,9 +34,26 @@ public class ProdutoController {
         return processarResposta(()->service.cadastrarProduto(produtoDto),"/produto");
     }
 
+    @PostMapping("/{id}/preco-custo")
+    public ResponseEntity<?> cadastrarPrecoCusto(@PathVariable("id") Long idProduto, @RequestParam("custo") Double custo, @RequestParam("quantidadeComprada") Integer quantidadeComprada) {
+        return processarResposta(() -> service.cadastrarPrecoCusto(idProduto, custo, quantidadeComprada), "/produto/" + idProduto + "/preco-custo");
+    }
+
+    @PostMapping("/{id}/preco-venda")
+    public ResponseEntity<?> cadastrarPrecoVenda(@PathVariable("id") Long idProduto, @RequestParam("precoVenda") Double precoVenda) {
+        return processarResposta(() -> service.cadastrarPrecoVenda(idProduto, precoVenda), "/produto/" + idProduto + "/preco-venda");
+    }
+
     @GetMapping("/{id}")
-    public ResponseEntity<?> buscarProduto(@PathVariable("id") Long idProduto) {
-        return processarResposta(() -> service.buscarProduto(idProduto), "/produto/" + idProduto);
+    public ResponseEntity<?> buscarProduto(@PathVariable("id") String id) {
+        if (id.length() < 5) {
+            // Se o parâmetro for numérico, assume-se que é um ID
+            Long idProduto = Long.parseLong(id);
+            return processarResposta(() -> service.buscarProduto(idProduto), "/produto/" + idProduto);
+        } else {
+            // Caso contrário, assume-se que é um código de barras
+            return processarResposta(() -> service.buscarProdutoPorCodigoDeBarras(id), "/produto/codigo-de-barras/" + id);
+        }
     }
 
     @PutMapping("/{id}")
@@ -53,9 +70,8 @@ public class ProdutoController {
     public ResponseEntity<List<ProdutoDetalheDto>> listarProdutos() {
         List<ProdutoDetalheDto> produtos = service.listarProdutos();
 
-        if (produtos.isEmpty()) {
+        if (produtos.isEmpty())
             return ResponseEntity.noContent().build();
-        }
 
         return ResponseEntity.ok(produtos);
     }
@@ -116,7 +132,7 @@ public class ProdutoController {
         return processarResposta(() -> service.estornarSaidaProduto(idProduto, movimentacaoDto), "/produto/" + idProduto + "/estornar-saida");
     }
 
-    @GetMapping("/comparativo")
+    @GetMapping("/")
     public ResponseEntity<?> comparativoEntradasSaidas(
             @RequestParam(name = "data", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data,
             @RequestParam(name = "intervalo", required = true) String intervalo) {
