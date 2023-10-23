@@ -1,9 +1,9 @@
 Spring:
   datasource:
     driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://containers-us-west-98.railway.app:5541/railway
+    url: jdbc:postgresql://containers-us-west-138.railway.app:6530/railway
     username: postgres
-    password: Rl87QS7YP2rFLVFC80Lc
+    password: NzfygfNHsbiORtkbB5nP
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
@@ -11,4 +11,3 @@ Spring:
         ddl-auto: update
         show_sql: true
         format: true
-
