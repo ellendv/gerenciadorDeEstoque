@@ -13,7 +13,7 @@ public class Estoque {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ESTOQUE_ID")
+    @Column(name = "ID")
     private Long id;
     @Column(name = "ESTOQUE_IDPRODUTO")
     private Long idProduto;
